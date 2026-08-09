@@ -1,0 +1,99 @@
+generated: '2026-08-09'
+method: probed
+source: https://editor.realisti.co/api/v4/
+name: Casavo Virtual Tools (Realisti.co) API — cross-cutting conventions
+api: casavo:virtual-tools
+summary: >-
+  Derived entirely from live anonymous probes of the API host — Casavo publishes no OpenAPI and the
+  reference URL it advertised is dead. Everything recorded here was observed on the wire; anything
+  that requires an authenticated call is marked unknown rather than guessed.
+stack:
+  framework: Django REST Framework
+  server: uvicorn
+  evidence:
+    server_header: uvicorn
+    browsable_index: Hyperlinked collection index (DRF DefaultRouter root view)
+    csrf_cookie: csrftoken
+media_type:
+  request: application/json
+  response: application/json
+  content_negotiation: >-
+    A `format` query parameter is honoured by the router but only the JSON/browsable renderers are
+    enabled — `?format=openapi` and `?format=corejson` both 404.
+versioning:
+  style: uri-path
+  pattern: https://editor.realisti.co/api/v{n}/
+  current: v4
+  live_versions:
+  - version: v4
+    url: https://editor.realisti.co/api/v4/
+    status: 200
+    collections: 28
+  - version: v3
+    url: https://editor.realisti.co/api/v3/
+    status: 200
+    collections: 2
+  - version: v2
+    url: https://editor.realisti.co/api/v2/
+    status: 200
+    collections: 6
+  - version: v5
+    url: https://editor.realisti.co/api/v5/
+    status: 404
+  note: >-
+    v2 and v3 are still served alongside v4 with no published deprecation date or Sunset header.
+resource_style:
+  discovery: >-
+    Each version root returns a JSON object mapping collection name to absolute collection URL —
+    a machine-readable route index, though not a schema.
+  identifiers: 32-character lowercase hex object ids (UUID without dashes) on agency detail routes.
+  trailing_slash: required
+  nesting: >-
+    Expansion is via query parameters on the detail route rather than sub-resources — the agency
+    detail route accepts `?levels=2&customizations` and inlines `profile` and `plan` objects.
+field_expansion:
+  supported: true
+  params:
+  - name: levels
+    observed_value: '2'
+    note: Depth of related-object inlining on agency detail.
+  - name: customizations
+    observed_value: '(flag)'
+    note: Inlines branding/customization fields.
+  evidence:
+    url: https://editor.realisti.co/api/v4/agency/fe27904b8bee4cb2a922c0f2092b5f0e/?levels=2&customizations
+    status: 200
+pagination:
+  style: unknown
+  note: >-
+    Every list collection is 401 anonymously, so the pagination envelope cannot be observed. DRF
+    defaults are not confirmed and are therefore not asserted here.
+idempotency:
+  supported: unknown
+  note: >-
+    No idempotency key header is documented and no write route is reachable anonymously. NOT
+    asserted — no `Idempotency` pointer is wired in apis.yml.
+rate_limiting:
+  signalled: false
+  note: >-
+    No `X-RateLimit-*`, `RateLimit`, or `Retry-After` headers were returned on any anonymous
+    response, and no rate-limit policy is published.
+request_tracing:
+  request_id_header: none observed
+error_envelope:
+  see: errors/casavo-error-codes.yml
+  shape: '{ data: { detail }, code, main_error }'
+  rfc9457: false
+security_headers:
+  observed_on: https://editor.realisti.co/api/v4/
+  x_frame_options: DENY
+  x_content_type_options: nosniff
+  referrer_policy: same-origin
+  cross_origin_opener_policy: same-origin
+  content_security_policy: present
+  strict_transport_security: not present on this host
+cross_links:
+  authentication: authentication/casavo-authentication.yml
+  errors: errors/casavo-error-codes.yml
+  lifecycle: lifecycle/casavo-lifecycle.yml
+  data_model: data-model/casavo-data-model.yml

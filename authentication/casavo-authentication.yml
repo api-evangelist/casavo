@@ -1,0 +1,88 @@
+generated: '2026-08-09'
+method: probed
+source: https://editor.realisti.co/api/v4/
+name: Casavo Virtual Tools (Realisti.co) API — authentication profile
+api: casavo:virtual-tools
+summary: >-
+  No OpenAPI is published for the Realisti.co API, so this profile is built from live anonymous
+  probes of the API host plus Casavo's own (now archived) help-centre integration article. Every
+  resource collection under /api/v4/ answers 401 with a DRF-style `not_authenticated` envelope;
+  only the collection index itself is anonymous. Casavo documents API-key issuance through an
+  invitation-only sandbox area, with the key then used against production.
+schemes:
+- id: api_key
+  type: apiKey
+  status: documented
+  in: unknown
+  name: unknown
+  description: >-
+    Casavo's help-centre article "Documentazione API" told integrators they would receive an
+    invitation to a sandbox area from which they could retrieve their API keys to test before
+    moving to production. The header/parameter name is not published anywhere public; the API
+    exposes an `apikey` collection (https://editor.realisti.co/api/v4/apikey/) which itself
+    requires authentication, so key management is self-service only for existing customers.
+  evidence:
+    documented_by: https://help.casavo.com/documentazione-api
+    documented_by_status: 404
+    archived_copy: https://web.archive.org/web/20210922202055/https://help.casavo.com/documentazione-api
+    apikey_collection: https://editor.realisti.co/api/v4/apikey/
+    apikey_collection_status: 401
+- id: session
+  type: http
+  status: observed
+  description: >-
+    The API host is a Django/DRF application fronted by uvicorn. The API index sets a `csrftoken`
+    cookie and the responses `Vary` on `Authorization` and `Cookie`, indicating both a session/cookie
+    path (used by the editor.realisti.co web application at /login/) and an Authorization-header path.
+  evidence:
+    probe: https://editor.realisti.co/api/v4/
+    probe_status: 200
+    vary_header: 'Origin, Accept-Language, Authorization, Cookie'
+    set_cookie: csrftoken
+    login_page: https://editor.realisti.co/login/
+    login_page_status: 200
+- id: auth_endpoint
+  type: endpoint
+  status: observed
+  url: https://editor.realisti.co/api/v4/auth/
+  description: >-
+    A dedicated `auth` collection is advertised in the v4 and v2 API indexes. It answers 401
+    anonymously, so the grant shape (token exchange vs. login) cannot be read without credentials.
+  evidence:
+    probe_status: 401
+oauth2: false
+openid_connect: false
+mutual_tls: false
+anonymous_surface:
+- url: https://editor.realisti.co/api/v4/
+  status: 200
+  note: Collection index — 28 resource links, no auth required.
+- url: https://editor.realisti.co/api/v3/
+  status: 200
+  note: Legacy index — view, viewdraft.
+- url: https://editor.realisti.co/api/v2/
+  status: 200
+  note: Legacy index — house, housedraft, floordraft, viewdraft, targetdraft, auth.
+- url: https://editor.realisti.co/api/v4/agency/fe27904b8bee4cb2a922c0f2092b5f0e/?levels=2&customizations
+  status: 200
+  note: >-
+    Agency detail is readable anonymously by object id — this is the read path the embedded
+    virtual-tour viewer uses. It returns agency name, legal entity (ragione sociale), branding
+    profile and plan entitlement flags.
+gated_surface:
+- url: https://editor.realisti.co/api/v4/house/
+  status: 401
+- url: https://editor.realisti.co/api/v4/apikey/
+  status: 401
+- url: https://editor.realisti.co/api/v4/auth/
+  status: 401
+docs: null
+docs_note: >-
+  The only integration documentation Casavo published (help.casavo.com/documentazione-api and its
+  Spanish twin) is gone — the whole HubSpot-hosted help centre now returns 404 — and the API
+  reference it pointed at (https://editor.realisti.co/api/v4/docs/) also returns 404.
+gaps:
+- No OpenAPI, Swagger or GraphQL SDL published for the API.
+- API key transport (header name / query parameter) is not documented publicly.
+- No OAuth 2.0 or OpenID Connect surface; no /.well-known/oauth-authorization-server.
+- The published API reference URL is dead, so no anonymous reader can learn the request shapes.

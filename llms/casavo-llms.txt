@@ -1,0 +1,55 @@
+# Casavo
+
+> Casavo Management S.p.A. is an Italian proptech company (Milan, founded 2017) running a digital
+> residential real estate platform in Italy, Spain, France and Portugal. It began as an iBuyer and
+> now operates as a marketplace and brokerage connecting sellers, buyers and partner estate agents,
+> with mortgage brokerage, document management and renovation services attached. Its developer-facing
+> surface is Realisti.co — marketed as Casavo Virtual Tools — a versioned REST API for creating and
+> managing property virtual tours.
+
+<!--
+generated: 2026-08-09
+method: generated
+source: apis.yml + repo artifacts (no provider-published /llms.txt exists; probed 404 on
+        casavo.com and editor.realisti.co on 2026-08-09)
+maintained-by: API Evangelist (https://apievangelist.com) — third-party profile, not Casavo
+-->
+
+## API
+
+- [Casavo Virtual Tools (Realisti.co) API](https://editor.realisti.co/api/v4/): Versioned REST API
+  for virtual tours. The v4 collection index is anonymous and lists 28 resources (house, floor,
+  view, target, poi and their draft twins, photo, photozipball, analytics, plans, agency,
+  agencyplan, agencyprofile, agentgroup, agent, apikey, category, auth, userprofile, subscribe,
+  sync/property, sync/agency, sync, syncagency). Every collection answers 401 without credentials.
+  v2 and v3 are still served alongside v4.
+- Documented capabilities (per Casavo's own, now-offline help centre): create an empty virtual
+  tour, retrieve the URL of an existing tour, activate/deactivate a tour.
+- No OpenAPI, Swagger, GraphQL SDL, AsyncAPI, MCP server or A2A agent card is published.
+- The API reference URL Casavo published, https://editor.realisti.co/api/v4/docs/, returns 404.
+
+## Authentication
+
+- API key, issued through an invitation-only sandbox area and enabled per plan
+  (`plan.can_api_use_api_key`). Key transport is not documented publicly.
+- Session/cookie path for the editor web application at https://editor.realisti.co/login/.
+- No OAuth 2.0 and no OpenID Connect.
+
+## Company
+
+- [Website](https://casavo.com/)
+- [Contact](https://casavo.com/en/contact/)
+- [Blog](https://blog.casavo.com/)
+- [Engineering](https://casavo.com/en/engineering/)
+- [Careers](https://casavo.com/en/careers/)
+- [GitHub organization](https://github.com/casavo): Helm charts, Terraform modules, GitHub
+  Actions, the Habitat design system. No API client SDKs.
+- [Terms and conditions](https://casavo.com/en/terms-and-conditions/)
+- [Privacy policy (PDF)](https://casavo.com/pdf/privacy-policy-en.pdf)
+- [Uptime page](https://uptime.casavo.com/) — client-side rendered, noindex.
+
+## Optional
+
+- [API Evangelist profile artifacts](https://github.com/api-evangelist/casavo): authentication,
+  error envelope, conventions, entity graph, lifecycle, conformance, domain security and the
+  /.well-known/ probe record — all derived from public probes, none supplied by Casavo.

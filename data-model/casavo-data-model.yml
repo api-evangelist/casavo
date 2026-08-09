@@ -1,0 +1,178 @@
+generated: '2026-08-09'
+method: probed
+source: https://editor.realisti.co/api/v4/
+name: Casavo Virtual Tools (Realisti.co) API — entity graph
+api: casavo:virtual-tools
+summary: >-
+  Derived from the anonymous v4 collection index (28 resources) and from the one detail payload the
+  API serves anonymously (agency, expanded with ?levels=2&customizations). No OpenAPI or schema
+  endpoint exists, so field-level detail is recorded only for the entities actually observed; the
+  rest are listed as advertised collections with their route, not invented schemas.
+entities:
+- name: house
+  route: https://editor.realisti.co/api/v4/house/
+  status: 401
+  note: 'The virtual tour / property. Draft twin: housedraft.'
+- name: floor
+  route: https://editor.realisti.co/api/v4/floor/
+  status: 401
+  note: 'A floor within a house. Draft twin: floordraft.'
+- name: view
+  route: https://editor.realisti.co/api/v4/view/
+  status: 401
+  note: 'A panoramic view (shot) within a floor. Draft twin: viewdraft. Also the only v3 resource.'
+- name: target
+  route: https://editor.realisti.co/api/v4/target/
+  status: 401
+  note: 'Navigation hotspot linking one view to another. Draft twin: targetdraft.'
+- name: poi
+  route: https://editor.realisti.co/api/v4/poi/
+  status: 401
+  note: 'Point of interest placed inside a view. Draft twin: poidraft. Gated by plan.can_add_poi.'
+- name: photo
+  route: https://editor.realisti.co/api/v4/photo/
+  status: 401
+- name: photozipball
+  route: https://editor.realisti.co/api/v4/photozipball/
+  status: 401
+  note: 'Bulk photo download. Gated by plan.can_download_zip_directly.'
+- name: analytics
+  route: https://editor.realisti.co/api/v4/analytics/
+  status: 401
+  note: 'Gated by plan.can_read_analytics / plan.can_use_custom_analytics.'
+- name: plans
+  route: https://editor.realisti.co/api/v4/plans/
+  status: 401
+- name: agency
+  route: https://editor.realisti.co/api/v4/agency/
+  status: 401
+  detail_route_anonymous: true
+  observed_fields:
+  - id            # 32-char hex object id
+  - name
+  - ragione_sociale
+  - parent        # self-reference to a parent agency, null on standalone agencies
+  - profile       # inlined agencyprofile
+  - plan          # inlined agencyplan
+  - customizations
+- name: agencyplan
+  route: https://editor.realisti.co/api/v4/agencyplan/
+  status: 401
+  observed_fields:
+  - id
+  - name
+  - is_free_trial
+  - house_count
+  - delayed_subscriptions
+  - can_api_use_api_key
+  - can_read_analytics
+  - can_use_custom_analytics
+  - can_add_poi
+  - can_download_zip_directly
+  - can_take_crop_image
+  - can_change_view_image
+  - can_customize_main_color
+  - can_customize_nadirlogo
+  - can_customize_target
+  - can_hide_realistico_logo
+  - can_use_new_cms
+  - can_use_remote_collecting
+  note: >-
+    Entitlement flags on the plan, including can_api_use_api_key — API access is a plan capability,
+    which matches Casavo's help-centre instruction to ask a sales representative to enable it.
+- name: agencyprofile
+  route: https://editor.realisti.co/api/v4/agencyprofile/
+  status: 401
+  observed_fields:
+  - id
+  - logo
+  - nadirlogo
+  - nadirlogo_complete
+  - logo_link
+  - main_color
+  - target_background
+  - target_foreground
+  - custom_analytics
+- name: agentgroup
+  route: https://editor.realisti.co/api/v4/agentgroup/
+  status: 401
+- name: agent
+  route: https://editor.realisti.co/api/v4/agent/
+  status: 401
+- name: apikey
+  route: https://editor.realisti.co/api/v4/apikey/
+  status: 401
+- name: category
+  route: https://editor.realisti.co/api/v4/category/
+  status: 401
+- name: auth
+  route: https://editor.realisti.co/api/v4/auth/
+  status: 401
+- name: userprofile
+  route: https://editor.realisti.co/api/v4/userprofile/
+  status: 401
+- name: subscribe
+  route: https://editor.realisti.co/api/v4/subscribe/
+  status: 401
+- name: sync
+  route: https://editor.realisti.co/api/v4/sync/
+  status: 401
+- name: sync/property
+  route: https://editor.realisti.co/api/v4/sync/property/
+  status: 401
+- name: sync/agency
+  route: https://editor.realisti.co/api/v4/sync/agency/
+  status: 401
+- name: syncagency
+  route: https://editor.realisti.co/api/v4/syncagency/
+  status: 401
+draft_pattern:
+  description: >-
+    Five entities ship a paired draft collection — house/housedraft, floor/floordraft,
+    view/viewdraft, target/targetdraft, poi/poidraft — indicating an unpublished editing copy
+    promoted to the live tour on publish.
+relationships:
+- from: agency
+  to: agency
+  type: has_one
+  via: parent
+  confidence: high
+  evidence: 'Observed null `parent` field on a standalone agency detail payload.'
+- from: agency
+  to: agencyprofile
+  type: has_one
+  via: profile
+  confidence: high
+- from: agency
+  to: agencyplan
+  type: has_one
+  via: plan
+  confidence: high
+- from: agency
+  to: customization
+  type: has_many
+  via: customizations
+  confidence: high
+- from: house
+  to: floor
+  type: has_many
+  confidence: medium
+  note: 'Inferred from the resource naming and the shared draft pattern, not from a payload.'
+- from: floor
+  to: view
+  type: has_many
+  confidence: medium
+  note: 'Inferred from resource naming; not confirmed on the wire (401).'
+- from: view
+  to: target
+  type: has_many
+  confidence: medium
+  note: 'Inferred; targets are the hotspots that link views.'
+- from: view
+  to: poi
+  type: has_many
+  confidence: medium
+  note: Inferred.
+gaps:
+- No schema endpoint, so field types and required-ness are unknown for 26 of the 28 collections.
+- Relationship cardinality between house/floor/view/target/poi is inferred, not read from a spec.

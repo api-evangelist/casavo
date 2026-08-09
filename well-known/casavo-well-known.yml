@@ -1,0 +1,69 @@
+generated: '2026-08-09'
+method: probed
+source: probe
+name: Casavo — /.well-known/ discovery probe
+summary: >-
+  Negative result, recorded for auditability. Every standard discovery path was probed on both the
+  corporate host and the API host. Nothing was found, so NO WellKnown or SecurityTxt pointer is
+  wired in apis.yml — an index of misses must not be allowed to score as a catalog.
+found: 0
+hosts:
+- host: casavo.com
+  paths:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: editor.realisti.co
+  paths:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: help.casavo.com
+  paths:
+  - path: /.well-known/security.txt
+    status: 404
+  note: Entire HubSpot-hosted help centre answers 404; treated as decommissioned.
+false_positives_rejected:
+- host: realisti.co
+  paths:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: text/html
+  - path: /llms.txt
+    status: 200
+    content_type: text/html
+  reason: >-
+    realisti.co redirects every path to the editor.realisti.co login SPA, which answers 200 with
+    HTML for any /.well-known/* path. Not an agent card, not an llms.txt — rejected per the
+    SPA-catch-all rule. No a2a/ artifact was written.
+checked: '2026-08-09'

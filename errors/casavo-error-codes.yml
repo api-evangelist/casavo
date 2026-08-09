@@ -1,0 +1,51 @@
+generated: '2026-08-09'
+method: probed
+source: https://editor.realisti.co/api/v4/
+name: Casavo Virtual Tools (Realisti.co) API — error envelope and observed codes
+api: casavo:virtual-tools
+format: custom-json
+rfc9457: false
+rfc9457_note: >-
+  Errors are returned as `application/json`, not `application/problem+json`, and carry no `type`,
+  `title`, `status`, `detail` or `instance` members in the RFC 9457 sense. The envelope is a
+  Django REST Framework body wrapped in a custom three-key structure.
+envelope:
+  content_type: application/json
+  shape:
+    data:
+      detail: Human-readable message (DRF's native error body, nested).
+    code: Machine-readable slug for the failure, or the HTTP status as a string.
+    main_error: Duplicate of the human-readable message, promoted to the top level.
+  example_observed: |
+    {"data":{"detail":"Authentication credentials were not provided."},"code":"not_authenticated","main_error":"Authentication credentials were not provided."}
+errors:
+- code: not_authenticated
+  http_status: 401
+  message: Authentication credentials were not provided.
+  cause: >-
+    A resource collection or detail route was called without a session cookie or Authorization
+    header. Applies to every collection under /api/v4/ except the index itself.
+  action: Supply the API key issued through the Casavo Virtual Tools sandbox/account area.
+  evidence:
+    url: https://editor.realisti.co/api/v4/house/
+    status: 401
+    observed: '2026-08-09'
+- code: '404'
+  http_status: 404
+  message: Not found.
+  cause: >-
+    Unknown route, unknown object id, or an unsupported content-negotiation `format` parameter
+    (e.g. `?format=openapi`, `?format=corejson` — neither renderer is enabled).
+  action: Check the resource name against the version index at /api/v{2,3,4}/.
+  evidence:
+    url: https://editor.realisti.co/api/v4/?format=openapi
+    status: 404
+    observed: '2026-08-09'
+notes:
+- >-
+  Non-API paths on the same host fall through to the Realisti.co web application's HTML 404 page
+  (`404: page not found | Realisti.co`, ~48KB), so a machine consumer must distinguish the JSON
+  API 404 from the SPA HTML 404 by content-type.
+- >-
+  No public error-code reference or status/error registry is published; this catalog records only
+  what anonymous probes actually returned. Authenticated 4xx/5xx classes are not observable.

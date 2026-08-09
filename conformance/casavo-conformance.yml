@@ -1,0 +1,79 @@
+generated: '2026-08-09'
+method: probed
+source: probe + repo artifacts
+name: Casavo — cross-cutting standards conformance
+summary: >-
+  Assessed against live probes of casavo.com and editor.realisti.co and against the artifacts in
+  this repo. Casavo publishes no compliance or certification page, so no `Compliance` pointer is
+  wired — every entry below is an observation, not a provider claim.
+conformance:
+- id: https-only
+  conforms: true
+  evidence: >-
+    Both casavo.com (TLSv1.3) and editor.realisti.co (TLSv1.2) serve over HTTPS; http://
+    status.casavo.com 308-redirects to https. See security/casavo-domain-security.yml.
+- id: hsts
+  conforms: partial
+  evidence: >-
+    casavo.com sets Strict-Transport-Security max-age=31536000. The API host
+    editor.realisti.co does not send HSTS.
+- id: dnssec
+  conforms: false
+  evidence: No DNSSEC on casavo.com or realisti.co.
+- id: caa
+  conforms: false
+  evidence: No CAA records published on casavo.com or realisti.co.
+- id: spf
+  conforms: true
+  evidence: SPF present on casavo.com and realisti.co.
+- id: dmarc
+  conforms: true
+  evidence: DMARC present with p=quarantine on casavo.com and realisti.co.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt 404 on casavo.com and editor.realisti.co.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    API errors are application/json with a custom {data:{detail},code,main_error} envelope, not
+    application/problem+json. See errors/casavo-error-codes.yml.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: >-
+    Three API versions run concurrently with no Sunset or Deprecation header on the legacy
+    v2/v3 indexes. See lifecycle/casavo-lifecycle.yml.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No OAuth 2.0 surface; /.well-known/oauth-authorization-server and
+    /.well-known/oauth-protected-resource both 404. Authentication is API key + session.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration 404 on both hosts.
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI/Swagger document at any probed location on casavo.com, editor.realisti.co or
+    the docs URL Casavo published; ?format=openapi and ?format=corejson both 404.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog 404 on both hosts.
+- id: llmstxt
+  conforms: false
+  evidence: /llms.txt 404 on casavo.com and editor.realisti.co.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json 404 on both hosts. The 200/text-html
+    responses on realisti.co are the login SPA catch-all and were rejected.
+- id: mcp
+  conforms: false
+  evidence: No hosted MCP endpoint found on any Casavo or Realisti.co host.
+- id: gdpr
+  conforms: claimed
+  evidence: >-
+    EU-domiciled company publishing an Italian/English privacy policy PDF and running an
+    Iubenda consent stack (observed in the API host CSP allowlist). No certification is published.
+    Recorded as a claim, not a verified certification.
+certifications_published: []
+compliance_page: null

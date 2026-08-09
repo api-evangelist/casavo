@@ -1,0 +1,42 @@
+generated: '2026-08-09'
+method: searched
+source: https://web.archive.org/web/20210922202055/https://help.casavo.com/documentazione-api
+name: Casavo Virtual Tools (Realisti.co) — sandbox posture
+api: casavo:virtual-tools
+available_publicly: false
+pointer_wired: false
+pointer_note: >-
+  No `Sandbox` pointer is wired in apis.yml. Casavo documented a sandbox, but it is
+  invitation-only and the host it lived on no longer resolves, so it is not a console or sandbox a
+  reader can reach.
+documented:
+  claim: >-
+    Casavo's help-centre integration article told integrators: "Riceverai a breve un invito per
+    iscriverti all'area sandbox, da lì potrai recuperare le tue API Key per effettuare i test prima
+    di passare in ambiente di produzione." — you will shortly receive an invitation to sign up for
+    the sandbox area, from which you can retrieve your API keys to test before moving to production.
+  source: https://help.casavo.com/documentazione-api
+  source_status: 404
+  archived: https://web.archive.org/web/20210922202055/https://help.casavo.com/documentazione-api
+  archived_status: 200
+  capabilities_documented:
+  - Create an (empty) virtual tour in Realisti.co.
+  - Retrieve the URL of an existing virtual tour.
+  - Activate / deactivate a virtual tour (for example at the end of a mandate).
+access:
+  model: invitation + plan entitlement
+  gate: >-
+    API use is a plan capability — the anonymously-readable agency payload exposes a
+    `plan.can_api_use_api_key` boolean — and the Spanish edition of the same help article told
+    customers to contact their sales representative if the API section was not visible on their
+    account.
+  evidence:
+    plan_flag_seen_at: https://editor.realisti.co/api/v4/agency/fe27904b8bee4cb2a922c0f2092b5f0e/?levels=2&customizations
+    plan_flag_status: 200
+hosts:
+- host: editor-sandbox.realisti.co
+  dns: NXDOMAIN
+  probe: https://editor-sandbox.realisti.co/api/v4/docs/
+  status: 000
+  note: The documented sandbox host does not resolve as of this probe.
+test_values_published: none

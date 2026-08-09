@@ -1,0 +1,66 @@
+generated: '2026-08-09'
+method: probed
+source: https://editor.realisti.co/api/v4/
+name: Casavo — API lifecycle posture
+summary: >-
+  Casavo publishes no versioning policy, no deprecation policy and no SLA for the Realisti.co API.
+  Version behaviour below is observed from live probes, not from a published statement.
+versioning:
+  policy_published: false
+  style: uri-path
+  current: v4
+  observed:
+  - version: v4
+    url: https://editor.realisti.co/api/v4/
+    status: 200
+  - version: v3
+    url: https://editor.realisti.co/api/v3/
+    status: 200
+  - version: v2
+    url: https://editor.realisti.co/api/v2/
+    status: 200
+  - version: v5
+    url: https://editor.realisti.co/api/v5/
+    status: 404
+  note: >-
+    Three major versions are served concurrently. v3 has been reduced to two collections
+    (view, viewdraft) and v2 to six, which reads as de facto narrowing without any announcement.
+deprecation:
+  policy_published: false
+  sunset_header: not observed
+  deprecation_header: not observed
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    No RFC 8594 Sunset or Deprecation headers were returned on the legacy v2/v3 indexes, and no
+    deprecation notice is published anywhere public.
+documentation_lifecycle:
+  reference_url_published_by_provider: https://editor.realisti.co/api/v4/docs/
+  reference_url_status: 404
+  help_centre: https://help.casavo.com/documentazione-api
+  help_centre_status: 404
+  note: >-
+    The API reference Casavo published to its integrators, and the help-centre article that
+    pointed at it, have both gone dark. The API itself is still live.
+status_page:
+  url: https://uptime.casavo.com/
+  status: 200
+  public: true
+  machine_readable: false
+  note: >-
+    A Casavo-branded uptime page is served at uptime.casavo.com. It is client-side rendered and
+    carries `robots: noindex`, so a human can read it but a crawler or agent cannot. The
+    status.casavo.com hostname points at UptimeRobot but did not complete a TLS handshake
+    (curl exit on https, 308 on http) at the time of probing.
+  probes:
+  - url: https://uptime.casavo.com/
+    status: 200
+  - url: https://status.casavo.com/
+    status: 000
+  - url: http://status.casavo.com/
+    status: 308
+sla:
+  published: false
+changelog:
+  published: false
+  note: No dated API changelog or release-notes page was found on any Casavo or Realisti.co host.
