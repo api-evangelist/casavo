@@ -12,6 +12,17 @@ description: >-
   tours, retrieve tour URLs, and activate or deactivate a tour at the end of a mandate. The company
   also runs a public GitHub organization of DevOps tooling, Helm charts, Terraform modules and the
   Habitat design system, and an engineering blog.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://casavo-wine.imgix.net/images/seo/casavo-og-image.png
 url: https://raw.githubusercontent.com/api-evangelist/casavo/refs/heads/main/apis.yml
 x-type: company
