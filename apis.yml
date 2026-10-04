@@ -47,7 +47,7 @@ created: '2026-08-09'
 modified: '2026-08-09'
 tags:
 - Company
-- Real-Estate
+- Real Estate
 - PropTech
 - Marketplace
 - Virtual Tours
@@ -67,6 +67,7 @@ tags_raw:
 - Spain
 - France
 - Mortgages
+- Real-Estate
 apis:
 - aid: casavo:virtual-tools
   name: Casavo Virtual Tools (Realisti.co) API
@@ -85,7 +86,7 @@ apis:
   baseURL: https://editor.realisti.co/api/v4/
   tags:
   - Virtual Tours
-  - Real-Estate
+  - Real Estate
   - Property Imaging
   - Media
   tags_raw:
@@ -93,6 +94,7 @@ apis:
   - Real Estate
   - Property Imaging
   - Media
+  - Real-Estate
   properties:
   - type: Authentication
     url: authentication/casavo-authentication.yml
